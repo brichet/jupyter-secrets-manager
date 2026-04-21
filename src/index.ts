@@ -2,12 +2,20 @@ import {
   JupyterFrontEnd,
   JupyterFrontEndPlugin
 } from '@jupyterlab/application';
+import { PageConfig } from '@jupyterlab/coreutils';
 import { ISettingRegistry } from '@jupyterlab/settingregistry';
+import { IJupyterWidgetRegistry } from '@jupyter-widgets/base';
 
 import { SecretsManager } from './manager';
 import { ISecretsManager } from './token';
 import { InMemoryConnector } from './connectors';
-import { PageConfig } from '@jupyterlab/coreutils';
+import {
+  MODULE_NAME,
+  MODULE_VERSION,
+  SecretsModel,
+  SecretsView,
+  setManager
+} from './widget';
 
 /**
  * A basic secret connector extension, that should be disabled to provide a new
@@ -77,7 +85,39 @@ const managerPlugin: JupyterFrontEndPlugin<ISecretsManager> = {
   }
 };
 
+/**
+ * A notebook widget plugin that bridges ipywidgets comm with the secrets manager.
+ */
+const widgetPlugin = SecretsManager.sign(
+  'jupyter-secrets-manager:widget',
+  (token: symbol | null) => ({
+    id: 'jupyter-secrets-manager:widget',
+    description: 'Notebook widget bridge for the secrets manager.',
+    autoStart: true,
+    requires: [ISecretsManager],
+    optional: [IJupyterWidgetRegistry],
+    activate: (
+      app: JupyterFrontEnd,
+      manager: ISecretsManager,
+      widgetRegistry: IJupyterWidgetRegistry | null
+    ): void => {
+      if (!token) {
+        return;
+      }
+      setManager(manager, token);
+      if (widgetRegistry) {
+        widgetRegistry.registerWidget({
+          name: MODULE_NAME,
+          version: MODULE_VERSION,
+          exports: { SecretsModel, SecretsView }
+        });
+      }
+    }
+  })
+);
+
 export * from './connectors';
 export * from './manager';
 export * from './token';
-export default [inMemoryConnector, managerPlugin];
+export * from './widget';
+export default [inMemoryConnector, managerPlugin, widgetPlugin];

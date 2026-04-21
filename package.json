@@ -57,6 +57,7 @@
         "watch:labextension": "jupyter labextension watch ."
     },
     "dependencies": {
+        "@jupyter-widgets/base": "^6.0.0",
         "@jupyterlab/application": "^4.0.0",
         "@jupyterlab/coreutils": "^6.0.0",
         "@jupyterlab/settingregistry": "^4.0.0",
@@ -103,7 +104,13 @@
     "jupyterlab": {
         "extension": true,
         "outputDir": "jupyter_secrets_manager/labextension",
-        "schemaDir": "schema"
+        "schemaDir": "schema",
+        "sharedPackages": {
+            "@jupyter-widgets/base": {
+                "bundled": false,
+                "singleton": true
+            }
+        }
     },
     "eslintIgnore": [
         "node_modules",

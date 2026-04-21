@@ -3,3 +3,33 @@
 
     https://jupyterlab.readthedocs.io/en/stable/developer/css.html
 */
+
+.jp-SecretsWidget {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 0;
+}
+
+.jp-SecretsWidget-label {
+  font-size: var(--jp-ui-font-size1);
+  color: var(--jp-ui-font-color1);
+  min-width: 100px;
+}
+
+.jp-SecretsWidget-input {
+  flex: 1;
+  padding: 4px 8px;
+  border: 1px solid var(--jp-border-color1);
+  border-radius: 2px;
+  background: var(--jp-layout-color1);
+  color: var(--jp-ui-font-color1);
+  font-size: var(--jp-ui-font-size1);
+  font-family: var(--jp-ui-font-family);
+}
+
+.jp-SecretsWidget-input:focus {
+  outline: none;
+  border-color: var(--jp-brand-color1);
+  box-shadow: 0 0 0 1px var(--jp-brand-color1);
+}

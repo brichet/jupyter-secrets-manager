@@ -8,6 +8,10 @@ except ImportError:
     warnings.warn("Importing 'jupyter_secrets_manager' outside a proper installation.")
     __version__ = "dev"
 
+from .widget import SecretsWidget
+
+__all__ = ["SecretsWidget"]
+
 
 def _jupyter_labextension_paths():
     return [{
